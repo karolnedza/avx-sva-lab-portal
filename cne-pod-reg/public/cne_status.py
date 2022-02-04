@@ -28,7 +28,7 @@ def get_pod_start(id, dynamodb=None):
         }
     )
     try:
-    # try to parse the object    
+    # try to parse the object
         start_num = response['Item']['start_num']
     except:
         # If code not found, print an error
@@ -49,13 +49,13 @@ def get_pod_end(id, dynamodb=None):
         }
     )
     try:
-    # try to parse the object    
+    # try to parse the object
         max_pods = response['Item']['max_pods']
     except:
         # If code not found, print an error
         return '''Error trying to find FlightSchool session ID'''
     else:
-        #print("Found max_pods %s" %(max_pods)) 
+        #print("Found max_pods %s" %(max_pods))
         return(max_pods)
 
 def get_pod_name(id, pod_id, dynamodb=None):
@@ -73,7 +73,7 @@ def get_pod_name(id, pod_id, dynamodb=None):
         }
     )
     try:
-    # try to parse the object    
+    # try to parse the object
         full_name = response['Item']['full_name']
     except:
         # If code not found, print an error
@@ -98,7 +98,7 @@ def get_company(id, pod_id, dynamodb=None):
         }
     )
     try:
-    # try to parse the object    
+    # try to parse the object
         company = response['Item']['company']
     except:
         # If code not found, print an error
@@ -109,7 +109,7 @@ def get_company(id, pod_id, dynamodb=None):
         return(company)
 
 def get_cid(pod):
-    ctrl_url = 'https://ctrl.pod'+str(pod)+str(".aviatrixlab.com/v1/api")
+    ctrl_url = 'https://ctrl.pod'+str(pod)+str(".sva.aviatrixnow.com/v1/api")
     payload = {"action": "login", "username": username, "password": password}
     payload_new = {}
     response = requests.post(url=ctrl_url, data=payload, verify=False)
@@ -118,7 +118,7 @@ def get_cid(pod):
 
 def vpc_lab2(cid, pod):
     vpc_cidr = str("10.%s.40.0/23") %pod
-    vpc_list = 'https://ctrl.pod'+str(pod)+str(".aviatrixlab.com/v1/api?action=list_custom_vpcs&CID=")+str(cid)+"&pool_name_only="
+    vpc_list = 'https://ctrl.pod'+str(pod)+str(".sva.aviatrixnow.com/v1/api?action=list_custom_vpcs&CID=")+str(cid)+"&pool_name_only="
     vpc_response = requests.request("GET", vpc_list, headers=headers, data = payload, verify=False)
     vpcs = vpc_response.json()
     lab2_1 = "-"
@@ -128,7 +128,7 @@ def vpc_lab2(cid, pod):
     return(lab2_1)
 
 def transit_gw_lab3(cid, pod):
-    avtx_tgw_list = 'https://ctrl.pod'+str(pod)+str(".aviatrixlab.com/v1/api?action=list_aviatrix_transit_gateways&CID=")+str(cid)
+    avtx_tgw_list = 'https://ctrl.pod'+str(pod)+str(".sva.aviatrixnow.com/v1/api?action=list_aviatrix_transit_gateways&CID=")+str(cid)
     avtx_tgw_response = requests.request("GET", avtx_tgw_list, headers=headers, data = payload, verify=False)
     avtx_tgw = avtx_tgw_response.json()
     vpc_cidr = str("10.%s.40.0/23") %pod
@@ -148,7 +148,7 @@ def transit_gw_lab3(cid, pod):
     return("-", "-", "-", "-")
 
 def spoke_gw_lab(cid):
-    spoke_gw_list = 'https://ctrl.pod'+str(pod)+str(".aviatrixlab.com/v1/api?action=list_primary_and_ha_spoke_gateways&CID=")+str(cid)
+    spoke_gw_list = 'https://ctrl.pod'+str(pod)+str(".sva.aviatrixnow.com/v1/api?action=list_primary_and_ha_spoke_gateways&CID=")+str(cid)
     spoke_gw_response = requests.request("GET", spoke_gw_list, headers=headers, data = payload, verify=False)
     spoke_gws = spoke_gw_response.json()
     if (len(spoke_gws['results']) > 4):
@@ -157,7 +157,7 @@ def spoke_gw_lab(cid):
         return("-")
 
 def s2c_tunnels(cid, pod):
-    ctrl_url_show = "https://ctrl.pod"+str(pod)+".aviatrixlab.com/v1/api?action=list_site2cloud&CID="+str(cid)+"&transit_only="
+    ctrl_url_show = "https://ctrl.pod"+str(pod)+".sva.aviatrixnow.com/v1/api?action=list_site2cloud&CID="+str(cid)+"&transit_only="
     s2c_state = requests.request("GET", ctrl_url_show, headers=headers, data = {}, verify=False)
     s2c = s2c_state.json()
     lab2_7 = "-"
@@ -168,10 +168,10 @@ def s2c_tunnels(cid, pod):
     #print('pod'+str(pod)+str(': 2.7: '+str(lab2_7)))
 
     return(lab2_7)
- 
+
 def security_domains(cid, pod):
     domain_name = []
-    sec_domain_url = "https://ctrl.pod"+str(pod)+".aviatrixlab.com/v1/api?action=list_multi_cloud_security_domains&CID="+str(cid)
+    sec_domain_url = "https://ctrl.pod"+str(pod)+".sva.aviatrixnow.com/v1/api?action=list_multi_cloud_security_domains&CID="+str(cid)
     sec_domain_url_req = requests.request("GET", sec_domain_url, headers=headers, data = {}, verify=False)
     sec_domain_url_resp = sec_domain_url_req.json()['results']['domains']
     lab3_1 = "-"
@@ -184,12 +184,12 @@ def security_domains(cid, pod):
             lab3_1 = "pass"
     except:
         lab3_1 = "-"
- 
+
     if len(sec_domain_url_resp) >= 4:
         lab3_2 = "pass"
 
     for i in domain_name:
-        sec_domain_policy_url = "https://ctrl.pod"+str(pod)+".aviatrixlab.com/v1/api?action=get_multi_cloud_security_domain_details&CID="+str(cid)+"&domain_name="+str(i)
+        sec_domain_policy_url = "https://ctrl.pod"+str(pod)+".sva.aviatrixnow.com/v1/api?action=get_multi_cloud_security_domain_details&CID="+str(cid)+"&domain_name="+str(i)
         sec_domain_policy_req = requests.request("GET", sec_domain_policy_url, headers=headers, data = {}, verify=False)
         sec_domain_policy_resp = sec_domain_policy_req.json()['results']
         if ("shared".lower() == sec_domain_policy_resp['name'].lower() and len(sec_domain_policy_resp['connected_domains']) >= 2):
@@ -201,7 +201,7 @@ def security_domains(cid, pod):
 
 def security_attachment(cid, pod):
     attachment = []
-    sec_domain_url = "https://ctrl.pod"+str(pod)+".aviatrixlab.com/v1/api?action=list_multi_cloud_security_domains&CID="+str(cid)
+    sec_domain_url = "https://ctrl.pod"+str(pod)+".sva.aviatrixnow.com/v1/api?action=list_multi_cloud_security_domains&CID="+str(cid)
     sec_domain_url_req = requests.request("GET", sec_domain_url, headers=headers, data = {}, verify=False)
     sec_domain_url_resp = sec_domain_url_req.json()['results']['domains']
     for i in sec_domain_url_resp:
@@ -213,7 +213,7 @@ def security_attachment(cid, pod):
     return(lab3_4)
 
 def fqdn_filter(cid, pod):
-    fqdn_filter_list = 'https://ctrl.pod'+str(pod)+".aviatrixlab.com/v1/api?action=list_fqdn_filter_tags&CID="+str(cid)
+    fqdn_filter_list = 'https://ctrl.pod'+str(pod)+".sva.aviatrixnow.com/v1/api?action=list_fqdn_filter_tags&CID="+str(cid)
     fqdn_filter_response = requests.request("GET", fqdn_filter_list, headers=headers, data = payload, verify=False)
     fqdn_filter = fqdn_filter_response.json()
     lab3_6 = "-"
@@ -238,16 +238,16 @@ a="""<html><head>
     border-collapse: collapse;
     width: 100%;
   }
-  
+
   #t01 td, #t01 th {
     border: 1px solid #ddd;
     padding: 8px;
   }
-  
+
   #t01 tr:nth-child(even){background-color: #f2f2f2;}
-  
+
   #t01 tr:hover {background-color: #ddd;}
-  
+
   #t01 th {
     padding-top: 12px;
     padding-bottom: 12px;

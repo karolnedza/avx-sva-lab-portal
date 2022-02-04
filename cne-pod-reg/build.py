@@ -23,8 +23,8 @@ def get_next_pod_id(id, name, email, company, start_time, code, dynamodb=None):
     )
     print(response)
     try:
-    # try to parse the object  
-        start_num = response['Item']['start_num']  
+    # try to parse the object
+        start_num = response['Item']['start_num']
         pod_num = response['Item']['pod_num']
         max_pods = response['Item']['max_pods']
     except:
@@ -55,7 +55,7 @@ def get_code(id, dynamodb=None):
         }
     )
     try:
-    # try to parse the object    
+    # try to parse the object
         code = response['Item']['code']
     except:
         # If code not found, print an error
@@ -76,7 +76,7 @@ def get_max_pods(id, dynamodb=None):
         }
     )
     try:
-    # try to parse the object    
+    # try to parse the object
         max_pods = response['Item']['max_pods']
     except:
         # If code not found, print an error
@@ -148,7 +148,7 @@ def check_for_existing_user(id, email_input):
             pod_id = user_id.split('-')
             print("[DEBUG] Found existing Pod ID {} with Email {}".format(pod_id, email_input))
             pod_id = str(int(pod_id[3]))
-            return(pod_id)            
+            return(pod_id)
 
 
 # Route for creating a new FlightSchool Session
@@ -224,7 +224,7 @@ def server_static(filepath):
 def process():
     # Get the form vars
     #max_num_pods = 46
-    domain = "aviatrixlab.com"
+    domain = "sva.aviatrixnow.com"
     name = request.forms.get('name')
     email = request.forms.get('email')
     company = request.forms.get('company')
@@ -243,13 +243,13 @@ def process():
         # Check if user already registered
         pod_id = check_for_existing_user(id, email)
         pod_id = int(pod_id)
-        # pod_id = 0 if the user is new 
+        # pod_id = 0 if the user is new
         print("[DEBUG] Pod id = {}".format(pod_id))
 
         if pod_id == 0:
             # Get the next POD ID, if the user is not already registered
             pod_id = get_next_pod_id(id, name, email, company, now, code)
-        
+
         if pod_id <= max_num_pods:
             # print a page to display pod info
             first_name = name.split(' ')
@@ -305,12 +305,12 @@ def process():
                 <div class="card-body">
                     <h5 class="card-title">Lab Guide</h5>
                     <p class="card-text">Download the lab guide here</p>
-                    <a target="_blank" rel="noopener noreferrer" href="https://portal.flightschool.aviatrixlab.com/docs" class="btn btn-primary">Open Lab Guide</a>
+                    <a target="_blank" rel="noopener noreferrer" href="https://portal.flightschool.sva.aviatrixnow.com/docs" class="btn btn-primary">Open Lab Guide</a>
                 </div>
                 </div>
             </div>
             </div>''' %(first_name[0], pod_id, pod_id, domain, pod_id, domain, pod_id, domain)
-            
+
         else:
             # print a page to say that there are no more pods left
             return '''<html>
@@ -350,7 +350,7 @@ def getusers():
 
     #if (response):
     #    return template('list', users=response['Items'])
-    #else: 
+    #else:
     #    return HTTPResponse(status=204)
 
 
@@ -364,4 +364,3 @@ def error401(error):
     return '401 - access is forbidden'
 
 run(host='0.0.0.0', reloader=True, port=8080, debug=True)
-
