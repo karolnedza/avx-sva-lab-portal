@@ -224,7 +224,7 @@ def server_static(filepath):
 def process():
     # Get the form vars
     #max_num_pods = 46
-    domain = "sva.aviatrixnow.com"
+    domain = "sva.aviatrixlab.de"
     name = request.forms.get('name')
     email = request.forms.get('email')
     company = request.forms.get('company')
@@ -305,7 +305,7 @@ def process():
                 <div class="card-body">
                     <h5 class="card-title">Lab Guide</h5>
                     <p class="card-text">Download the lab guide here</p>
-                    <a target="_blank" rel="noopener noreferrer" href="https://portal.flightschool.sva.aviatrixnow.com/docs" class="btn btn-primary">Open Lab Guide</a>
+                    <a target="_blank" rel="noopener noreferrer" href="https://portal.flightschool.sva.aviatrixlab.de/docs" class="btn btn-primary">Open Lab Guide</a>
                 </div>
                 </div>
             </div>
